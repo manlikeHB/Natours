@@ -13,6 +13,7 @@ const tourRouter = require('.//routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) Set security http header
-app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy('cross - origin'));
 
 // Development logging
 console.log(process.env.NODE_ENV);
@@ -38,6 +39,9 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+// cookie parser
+app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -66,7 +70,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toString();
-  // console.log(req.headers);
+  // console.log(req.cookies);
   next();
 });
 
