@@ -13,6 +13,7 @@ const tourRouter = require('.//routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -22,6 +23,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 // 1) Set security http header
 app.use(helmet.crossOriginResourcePolicy('cross - origin'));
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:'],
+//       baseUri: ["'self'"],
+//       fontSrc: ["'self'", 'https:', 'http:', 'data:'],
+//       scriptSrc: ["'self'", 'https:', 'http:', 'blob:'],
+//       styleSrc: ["'self'", 'https:', 'http:', 'unsafe-inline'],
+//     },
+//   })
+// );
 
 // Development logging
 console.log(process.env.NODE_ENV);
@@ -85,6 +97,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   // res.status(404).json({
