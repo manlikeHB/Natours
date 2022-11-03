@@ -50,7 +50,6 @@ exports.signUp = catchAsync(async (req, res, next) => {
   });
 
   let url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
   await new Email(newUser, url).sendWelcome();
 
   // Send Tooken
@@ -58,7 +57,6 @@ exports.signUp = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const { email, password } = req.body;
 
   // 1) Check if email and password exist
@@ -83,14 +81,12 @@ exports.logOut = (req, res) => {
     httpOnly: true,
   });
 
-  console.log(res.cookie);
   res.status(200).json({ status: 'success' });
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Get token check if its there
   let token;
-  // console.log(req.headers);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
@@ -161,7 +157,6 @@ exports.isLoggedIn = async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    console.log(req.user.role);
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError('You do not have permission to perform this action', 403)
