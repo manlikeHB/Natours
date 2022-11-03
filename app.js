@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -23,6 +24,12 @@ app.enable('trust proxy');
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+
+// Set CORS
+app.use(cors());
+
+// Allow complex request like (Delete, Patch and Put) when the browser sends a preflight request
+app.options('*', cors());
 
 // 1) Set security http header
 app.use(helmet.crossOriginResourcePolicy('cross - origin'));
