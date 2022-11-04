@@ -71,7 +71,7 @@ exports.webhookCheckout = (req, res, next) => {
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(
+    event = stripe.Webhook.construct_even(
       req.body,
       signature,
       STRIPE_WEBHOOK_SECRET
@@ -81,7 +81,7 @@ exports.webhookCheckout = (req, res, next) => {
   }
 
   if (event.type === 'checkout.session.completed') {
-    createBookingCheckout(event.object);
+    createBookingCheckout(event.data.object);
   }
 
   res.status(200).json({ recieved: true });
