@@ -55,6 +55,19 @@ exports.getLoginForm = (req, res) => {
     });
 };
 
+exports.getSignUpForm = (req, res, next) => {
+  res
+    .status(200)
+    .set(
+      'Content-Security-Policy',
+      "script-src 'self' https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js 'unsafe-inline' 'unsafe-eval';",
+      'script-src "self" https://js.stripe.com/v3/ '
+    )
+    .render('signUp', {
+      title: 'Sign Up',
+    });
+};
+
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account',

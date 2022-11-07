@@ -4,6 +4,7 @@ import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
+import { signUp } from './signUp';
 
 // DOM ELEMENT
 const mapBox = document.getElementById('map');
@@ -12,7 +13,7 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userDataPassword = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
-
+const SignUpForm = document.querySelector('.form--signup');
 // VALUES
 
 // DELEGATION
@@ -42,7 +43,6 @@ if (userDataForm) {
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-
 
     updateSettings(form, 'data');
   });
@@ -77,5 +77,18 @@ if (bookBtn) {
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
     bookTour(tourId);
+  });
+}
+
+if (SignUpForm) {
+  document.querySelector('.form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('password-confirm').value;
+
+    signUp(name, email, password, confirmPassword);
   });
 }
