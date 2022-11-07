@@ -71,20 +71,19 @@ exports.webhookCheckout = (req, res, next) => {
 
   let event;
   try {
-    event = stripe.Webhook.construct_even(
+    event = stripe.webhooks.constructEvent(
       req.body,
       signature,
-      STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    res.status(400).send(`Webhook error: ${err.message}`);
+    return res.status(400).send(`Webhook error: ${err.message}`);
   }
 
-  if (event.type === 'checkout.session.completed') {
-    createBookingCheckout(event.data);
-  }
+  if (event.type === 'checkout.session.completed')
+    createBookingCheckout(event.data.object);
 
-  res.status(200).json({ recieved: true });
+  res.status(200).json({ received: true });
 };
 
 exports.getAllBookings = factory.getAll(Booking);
