@@ -71,7 +71,7 @@ exports.webhookCheckout = async (req, res, next) => {
 
   let event;
   try {
-    event = stripe.Webhook.construct_even(
+    event = stripe.webhooks.constructEvent(
       req.body,
       signature,
       STRIPE_WEBHOOK_SECRET
@@ -80,8 +80,12 @@ exports.webhookCheckout = async (req, res, next) => {
     res.status(400).send(`Webhook error: ${err.message}`);
   }
 
-  if (event.type === 'checkout.session.completed') {
-    await createBookingCheckout(event.data.object);
+  try {
+    if (event.type === 'checkout.session.completed') {
+      await createBookingCheckout(event.data.object);
+    }
+  } catch (err) {
+    res.status(400).send('Function creaateBookingCheckout not reached');
   }
 
   res.status(200).send({ recieved: true });
