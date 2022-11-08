@@ -57,7 +57,6 @@ exports.getOne = (Model, popOptions) =>
       return next(new AppError('No document found with that ID', 404));
     }
 
-
     res.status(200).json({
       status: 'sucess',
       data: {
@@ -71,6 +70,7 @@ exports.getAll = (Model) =>
     // To allow for nested Get reviews on tour
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
+    if (req.params.userId) filter = { user: req.params.userId };
 
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
