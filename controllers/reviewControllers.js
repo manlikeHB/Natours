@@ -1,6 +1,7 @@
 const Review = require('../models/reviewModel');
-// const catchAsync = require('./../utils/catchAsync');
-// const AppError = require('./../utils/appError');
+const Booking = require('../models/bookingModel');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
 
 // exports.getAllReviews = catchAsync(async (req, res, next) => {
@@ -44,6 +45,19 @@ exports.setTourUserIds = (req, res, next) => {
 
   next();
 };
+
+exports.checkBookedTour = catchAsync(async (req, res, next) => {
+  const booking = await Booking.find({
+    user: req.user.id,
+    tour: req.params.tourId,
+  });
+
+  if (!(Array.isArray(booking) && booking.length)) {
+    return next(new AppError('You can only review a tour you booked!'), 400);
+  }
+
+  next();
+});
 
 exports.getReview = factory.getOne(Review);
 exports.createReviews = factory.createOne(Review);
