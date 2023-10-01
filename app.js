@@ -7,17 +7,17 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
-const tourRouter = require('.//routes/tourRoutes');
+const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const bookingController = require('./controllers/bookingControllers');
-const cookieParser = require('cookie-parser');
 
 const app = express();
 
